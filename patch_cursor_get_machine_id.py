@@ -12,9 +12,9 @@ import tempfile
 from typing import Tuple
 
 
-# 配置日志
+ # Configure logging
 def setup_logging() -> logging.Logger:
-    """配置并返回logger实例"""
+    """Configure and return logger instance"""
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     handler = logging.StreamHandler()
@@ -31,13 +31,13 @@ logger = setup_logging()
 
 def get_cursor_paths() -> Tuple[str, str]:
     """
-    根据不同操作系统获取 Cursor 相关路径
+    Get Cursor related paths according to different operating systems
 
     Returns:
-        Tuple[str, str]: (package.json路径, main.js路径)的元组
+        Tuple[str, str]: Tuple of (package.json path, main.js path)
 
     Raises:
-        OSError: 当找不到有效路径或系统不支持时抛出
+        OSError: Raised when no valid path is found or system is unsupported
     """
     system = platform.system()
 
@@ -62,24 +62,24 @@ def get_cursor_paths() -> Tuple[str, str]:
     }
 
     if system not in paths_map:
-        raise OSError(f"不支持的操作系统: {system}")
+        raise OSError(f"Unsupported operating system: {system}")
 
     if system == "Linux":
         for base in paths_map["Linux"]["bases"]:
             pkg_path = os.path.join(base, paths_map["Linux"]["package"])
             if os.path.exists(pkg_path):
                 return (pkg_path, os.path.join(base, paths_map["Linux"]["main"]))
-        raise OSError("在 Linux 系统上未找到 Cursor 安装路径")
+        raise OSError("Cursor installation path not found on Linux system")
 
     base_path = paths_map[system]["base"]
-    # 判断Windows是否存在这个文件夹,如果不存在,提示需要创建软连接后重试
+    # Check if Windows folder exists, if not, prompt to create symlink and retry
     if system  == "Windows":
         if not os.path.exists(base_path):
-            logging.info('可能您的Cursor不是默认安装路径,请创建软连接,命令如下:')
-            logging.info('cmd /c mklink /d "C:\\Users\\<username>\\AppData\\Local\\Programs\\Cursor" "默认安装路径"')
-            logging.info('例如:')
+            logging.info('Your Cursor may not be installed in the default path, please create a symlink with the following command:')
+            logging.info('cmd /c mklink /d "C:\\Users\\<username>\\AppData\\Local\\Programs\\Cursor" "default installation path"')
+            logging.info('For example:')
             logging.info('cmd /c mklink /d "C:\\Users\\<username>\\AppData\\Local\\Programs\\Cursor" "D:\\SoftWare\\cursor"')
-            input("\n程序执行完毕，按回车键退出...")
+            input("\nProgram finished, press Enter to exit...")
     return (
         os.path.join(base_path, paths_map[system]["package"]),
         os.path.join(base_path, paths_map[system]["main"]),
@@ -88,22 +88,22 @@ def get_cursor_paths() -> Tuple[str, str]:
 
 def check_system_requirements(pkg_path: str, main_path: str) -> bool:
     """
-    检查系统要求
+    Check system requirements
 
     Args:
-        pkg_path: package.json 文件路径
-        main_path: main.js 文件路径
+        pkg_path: package.json file path
+        main_path: main.js file path
 
     Returns:
-        bool: 检查是否通过
+        bool: Whether the check passes
     """
     for file_path in [pkg_path, main_path]:
         if not os.path.isfile(file_path):
-            logger.error(f"文件不存在: {file_path}")
+            logger.error(f"File does not exist: {file_path}")
             return False
 
         if not os.access(file_path, os.W_OK):
-            logger.error(f"没有文件写入权限: {file_path}")
+            logger.error(f"No write permission for file: {file_path}")
             return False
 
     return True
@@ -111,12 +111,12 @@ def check_system_requirements(pkg_path: str, main_path: str) -> bool:
 
 def version_check(version: str, min_version: str = "", max_version: str = "") -> bool:
     """
-    版本号检查
+    Version check
 
     Args:
-        version: 当前版本号
-        min_version: 最小版本号要求
-        max_version: 最大版本号要求
+        version: Current version
+        min_version: Minimum required version
+        max_version: Maximum allowed version
 
     Returns:
         bool: 版本号是否符合要求

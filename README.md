@@ -1,39 +1,39 @@
-# Cursor Pro 自动化工具使用说明
+ # Cursor Pro Automation Tool User Guide
 
 
 [English doc](./README.EN.md)
 
 
-## 在线文档
+## Online Documentation
 [cursor-auto-free-doc.vercel.app](https://cursor-auto-free-doc.vercel.app)
 
 
-## 公众号
+## Official Account
 
-![公众号](./screen/qrcode_for_gh_c985615b5f2b_258.jpg)
+![Official Account](./screen/qrcode_for_gh_c985615b5f2b_258.jpg)
 
-## 英文名字集
+## English Name Dataset
 https://github.com/toniprada/usa-names-dataset
 
-## 许可证声明
-本项目采用 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) 许可证。
-这意味着您可以：
-- 分享 — 在任何媒介以任何形式复制、发行本作品
-但必须遵守以下条件：
-- 非商业性使用 — 您不得将本作品用于商业目的
+## License Statement
+This project uses the [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) license.
+This means you can:
+- Share — Copy and distribute this work in any medium or format
+But you must comply with the following conditions:
+- Non-commercial use — You may not use this work for commercial purposes
 
-## 声明
-- 本项目仅供学习交流使用，请勿用于商业用途。
-- 本项目不承担任何法律责任，使用本项目造成的任何后果，由使用者自行承担。
+## Disclaimer
+- This project is for learning and communication purposes only. Do not use for commercial purposes.
+- This project assumes no legal responsibility. Any consequences arising from the use of this project are the sole responsibility of the user.
 
 
-## 感谢 linuxDo 这个开源社区(一个真正的技术社区)
+## Thanks to linuxDo Open Source Community (A Real Tech Community)
 https://linux.do/
 
-## 特别鸣谢
-本项目的开发过程中得到了众多开源项目和社区成员的支持与帮助，在此特别感谢：
+## Special Thanks
+During the development of this project, we received support and help from many open source projects and community members. Special thanks to:
 
-## 请我喝杯茶 | buy me a cup of tea
+## Buy Me a Cup of Tea
 <img src="./screen/image.png" width="300"/>
 <img src="./screen/28613e3f3f23a935b66a7ba31ff4e3f.jpg" width="300"/>
 <img src="./screen/mm_facetoface_collect_qrcode_1738583247120.png" width="300"/>
