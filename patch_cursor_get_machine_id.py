@@ -119,12 +119,12 @@ def version_check(version: str, min_version: str = "", max_version: str = "") ->
         max_version: Maximum allowed version
 
     Returns:
-        bool: 版本号是否符合要求
+        bool: Whether the version number meets the requirements
     """
     version_pattern = r"^\d+\.\d+\.\d+$"
     try:
         if not re.match(version_pattern, version):
-            logger.error(f"无效的版本号格式: {version}")
+            logger.error(f"Invalid version format: {version}")
             return False
 
         def parse_version(ver: str) -> Tuple[int, ...]:
@@ -133,32 +133,32 @@ def version_check(version: str, min_version: str = "", max_version: str = "") ->
         current = parse_version(version)
 
         if min_version and current < parse_version(min_version):
-            logger.error(f"版本号 {version} 小于最小要求 {min_version}")
+            logger.error(f"Version {version} is less than minimum required {min_version}")
             return False
 
         if max_version and current > parse_version(max_version):
-            logger.error(f"版本号 {version} 大于最大要求 {max_version}")
+            logger.error(f"Version {version} is greater than maximum allowed {max_version}")
             return False
 
         return True
 
     except Exception as e:
-        logger.error(f"版本检查失败: {str(e)}")
+        logger.error(f"Version check failed: {str(e)}")
         return False
 
 
 def modify_main_js(main_path: str) -> bool:
     """
-    修改 main.js 文件
+    Modify main.js file
 
     Args:
-        main_path: main.js 文件路径
+        main_path: main.js file path
 
     Returns:
-        bool: 修改是否成功
+        bool: Whether modification succeeded
     """
     try:
-        # 获取原始文件的权限和所有者信息
+        # Get original file permissions and owner info
         original_stat = os.stat(main_path)
         original_mode = original_stat.st_mode
         original_uid = original_stat.st_uid
@@ -168,7 +168,7 @@ def modify_main_js(main_path: str) -> bool:
             with open(main_path, "r", encoding="utf-8") as main_file:
                 content = main_file.read()
 
-            # 执行替换
+            # Perform replacement
             patterns = {
                 r"async getMachineId\(\)\{return [^??]+\?\?([^}]+)\}": r"async getMachineId(){return \1}",
                 r"async getMacMachineId\(\)\{return [^??]+\?\?([^}]+)\}": r"async getMacMachineId(){return \1}",
@@ -180,20 +180,20 @@ def modify_main_js(main_path: str) -> bool:
             tmp_file.write(content)
             tmp_path = tmp_file.name
 
-        # 使用 shutil.copy2 保留文件权限
+        # Use shutil.copy2 to preserve file permissions
         shutil.copy2(main_path, main_path + ".old")
         shutil.move(tmp_path, main_path)
 
-        # 恢复原始文件的权限和所有者
+        # Restore original file permissions and owner
         os.chmod(main_path, original_mode)
         if os.name != "nt":  # 在非Windows系统上设置所有者
             os.chown(main_path, original_uid, original_gid)
 
-        logger.info("文件修改成功")
+        logger.info("File modified successfully")
         return True
 
     except Exception as e:
-        logger.error(f"修改文件时发生错误: {str(e)}")
+        logger.error(f"Error occurred while modifying file: {str(e)}")
         if "tmp_path" in locals():
             os.unlink(tmp_path)
         return False
@@ -201,108 +201,109 @@ def modify_main_js(main_path: str) -> bool:
 
 def backup_files(pkg_path: str, main_path: str) -> bool:
     """
-    备份原始文件
+    Backup original files
 
     Args:
-        pkg_path: package.json 文件路径（未使用）
-        main_path: main.js 文件路径
+        pkg_path: package.json file path (unused)
+        main_path: main.js file path
 
     Returns:
-        bool: 备份是否成功
+        bool: Whether backup succeeded
     """
     try:
-        # 只备份 main.js
+        # Only backup main.js
         if os.path.exists(main_path):
             backup_main = f"{main_path}.bak"
             shutil.copy2(main_path, backup_main)
-            logger.info(f"已备份 main.js: {backup_main}")
+            logger.info(f"main.js backed up: {backup_main}")
 
         return True
     except Exception as e:
-        logger.error(f"备份文件失败: {str(e)}")
+        logger.error(f"Backup file failed: {str(e)}")
         return False
 
 
 def restore_backup_files(pkg_path: str, main_path: str) -> bool:
     """
-    恢复备份文件
+    Restore backup files
 
     Args:
-        pkg_path: package.json 文件路径（未使用）
-        main_path: main.js 文件路径
+        pkg_path: package.json file path (unused)
+        main_path: main.js file path
 
     Returns:
-        bool: 恢复是否成功
+        bool: Whether restore succeeded
     """
     try:
-        # 只恢复 main.js
+        # Only restore main.js
         backup_main = f"{main_path}.bak"
         if os.path.exists(backup_main):
             shutil.copy2(backup_main, main_path)
-            logger.info(f"已恢复 main.js")
+            logger.info(f"main.js restored")
             return True
 
-        logger.error("未找到备份文件")
+        logger.error("Backup file not found")
         return False
     except Exception as e:
-        logger.error(f"恢复备份失败: {str(e)}")
+        logger.error(f"Restore backup failed: {str(e)}")
         return False
 
 
 def patch_cursor_get_machine_id(restore_mode=False) -> None:
     """
-    主函数
+    Main function
 
     Args:
-        restore_mode: 是否为恢复模式
+        restore_mode: Whether to run in restore mode
     """
     logger.info("开始执行脚本...")
+    logger.info("Starting script...")
 
     try:
-        # 获取路径
+        # Get paths
         pkg_path, main_path = get_cursor_paths()
 
-        # 检查系统要求
+        # Check system requirements
         if not check_system_requirements(pkg_path, main_path):
             sys.exit(1)
 
         if restore_mode:
-            # 恢复备份
+            # Restore backup
             if restore_backup_files(pkg_path, main_path):
-                logger.info("备份恢复完成")
+                logger.info("Backup restored successfully")
             else:
-                logger.error("备份恢复失败")
+                logger.error("Backup restore failed")
             return
 
-        # 获取版本号
+        # Get version number
         try:
             with open(pkg_path, "r", encoding="utf-8") as f:
                 version = json.load(f)["version"]
-            logger.info(f"当前 Cursor 版本: {version}")
+            logger.info(f"Current Cursor version: {version}")
         except Exception as e:
-            logger.error(f"无法读取版本号: {str(e)}")
+            logger.error(f"Unable to read version number: {str(e)}")
             sys.exit(1)
 
-        # 检查版本
+        # Check version
         if not version_check(version, min_version="0.45.0"):
-            logger.error("版本不符合要求（需 >= 0.45.x）")
+            logger.error("Version does not meet requirements (>= 0.45.x required)")
             sys.exit(1)
 
-        logger.info("版本检查通过，准备修改文件")
+        logger.info("Version check passed, preparing to modify file")
 
-        # 备份文件
+        # Backup files
         if not backup_files(pkg_path, main_path):
-            logger.error("文件备份失败，终止操作")
+            logger.error("File backup failed, aborting operation")
             sys.exit(1)
 
-        # 修改文件
+        # Modify file
         if not modify_main_js(main_path):
             sys.exit(1)
 
-        logger.info("脚本执行完成")
+        logger.info("Script execution completed")
 
     except Exception as e:
-        logger.error(f"执行过程中发生错误: {str(e)}")
+        logger.error(f"Error occurred during execution: {str(e)}")
         sys.exit(1)
 
 

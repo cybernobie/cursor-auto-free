@@ -2,9 +2,9 @@ import os
 
 class Language:
     def __init__(self):
-        self.current_language = "cn"  # Default language is Chinese
+        self.current_language = "en"  # Default language is Chinese
         self.translations = {
-            "cn": {
+            "en": {
                 # System messages
                 "error": "❌",
                 "warning": "⚠️",
@@ -87,7 +87,7 @@ class Language:
                 "domain": "域名: {domain}",
                 
                 # End messages
-                "end_message": "=" * 30 + "\n所有操作已完成\n\n=== 获取更多信息 ===\n📺 B站UP主: 想回家的前端\n🔥 公众号: code 未来\n" + "=" * 30,
+                "end_message": "=" * 30 + "\nAll operations completed\n\n=== Get More Information ===\n📺 Bilibili UP: Homebound Frontend\n🔥 WeChat Official Account: code-future\n" + "=" * 30,
                 
                 # Error messages
                 "file_not_exists": "文件 {path} 不存在",
@@ -208,7 +208,7 @@ class Language:
                 "domain": "Domain: {domain}",
                 
                 # End messages
-                "end_message": "=" * 30 + "\nAll operations completed\n\n=== Get More Information ===\n📺 Bilibili UP: 想回家的前端\n🔥 WeChat: code 未来\n" + "=" * 30,
+                "end_message": "=" * 30 + "\nAll operations completed\n\n=== Get More Information ===\n📺 Bilibili UP: Homebound Frontend\n🔥 WeChat Official Account: code-future\n" + "=" * 30,
                 
                 # Error messages
                 "file_not_exists": "File {path} does not exist",
@@ -278,7 +278,7 @@ class Language:
         """Display language selection prompt and return selected language code"""
         print(self.translations["cn"]["select_language"])
         print(self.translations["cn"]["chinese"])
-        print(self.translations["cn"]["english"])
+        print(self.translations["en"]["english"])
         
         while True:
             try:
@@ -292,9 +292,9 @@ class Language:
                     print(self.get("language_selected"))
                     return "en"
                 else:
-                    print(self.translations["cn"]["invalid_option"])
+                    print(self.translations["en"]["invalid_option"])
             except ValueError:
-                print(self.translations["cn"]["enter_valid_number"])
+                print(self.translations["en"]["enter_valid_number"])
 
 # Global language instance
 language = Language()
